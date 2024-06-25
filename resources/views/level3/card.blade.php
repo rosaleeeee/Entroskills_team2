@@ -7,12 +7,16 @@
         }
     </script>
     <main>
+    <h2 style="font-size: 20px; color: #5398D4; text-align: center; margin-bottom: 18px;">
+    Explore Key Roles: Click 'Read More' to Discover Detailed Descriptions of Each Position.
+</h2>
         <div style="display: flex; height: 85vh;">
             <div style="width: 100px; color: black; padding: 20px;">
                 <!-- start navbar --> 
                 @include('layouts.sidebar')    
                 <!-- end navbar -->
             </div>
+
             <section class="container">
                 <div class="cards grid">
                     <!-- Card 1 -->

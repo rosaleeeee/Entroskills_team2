@@ -2,7 +2,6 @@
     <link href="{{ asset('lv3quiz.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 
- 
     <body>
         <div>
             <!-- start navbar -->
@@ -25,7 +24,7 @@
                 </div>
             </div>
         </section>
-        <button type="button" class="bbttnn" onclick="window.location.href='modellev3'">Next</button>
+        <button id="done-btn" class="bbttnn hidden" onclick="window.location.href='modellev3'">DONE</button>
 
         <script>
             const questions = [
@@ -116,6 +115,7 @@
             const questionElement = document.getElementById("question");
             const answerButtonsElement = document.getElementById("answer-buttons");
             const nextButton = document.getElementById("next-btn");
+            const doneButton = document.getElementById("done-btn");
             const timerElement = document.getElementById("timer");
 
             let currentQuestionIndex = 0;
@@ -129,6 +129,7 @@
                 timeLeft = 20;
                 nextButton.innerHTML = "Next";
                 nextButton.removeEventListener("click", startQuiz);
+                doneButton.classList.add("hidden"); // Masquer le bouton DONE au début
                 showQuestion();
             }
 
@@ -160,7 +161,7 @@
 
             function startTimer() {
                 timeLeft = 20;
-                timerElement.style.display = "block"; // Show timer when the quiz starts
+                timerElement.style.display = "block"; // Afficher le minuteur lorsque le quiz commence
                 timerElement.innerHTML = `Time left: ${timeLeft}s`;
                 timer = setInterval(() => {
                     timeLeft--;
@@ -201,15 +202,16 @@
                 });
 
                 nextButton.style.display = "block";
-                clearInterval(timer); // Stop timer when answer is selected
+                clearInterval(timer); // Arrêter le minuteur lorsque la réponse est sélectionnée
             }
 
             function showScore() {
                 resetState();
-                timerElement.style.display = "none"; // Hide timer when showing score
+                timerElement.style.display = "none"; // Masquer le minuteur lors de l'affichage du score
                 questionElement.innerHTML = `You scored ${score} out of ${questions.length}`;
                 nextButton.innerHTML = "Play Again";
                 nextButton.style.display = "block";
+                doneButton.classList.remove("hidden"); // Afficher le bouton DONE
                 nextButton.addEventListener("click", startQuiz);
             }
 
@@ -227,5 +229,5 @@
             startQuiz();
         </script>
     </body>
-
 </x-app-layout>
+ 
