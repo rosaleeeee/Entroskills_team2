@@ -11,6 +11,8 @@ use App\Http\Controllers\RecController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\BusinessModelController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\ScoreController;
+
 
 
 
@@ -164,4 +166,8 @@ Route::get('/level1/ExerciceBUSINESSMODEL', function () {
 Route::get('/level1/FinLevel', function () {
     return view('level1.FinLevel');
 })->name('FinLevel');
+
+
+
+Route::post('/save-score', [ScoreController::class, 'saveScore']);
 

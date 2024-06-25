@@ -9,14 +9,12 @@
     <body>
         @include('layouts.sidebar')
         <!-- Affichage du score en haut de la page -->
-      
-
         @php
         $userScore = Auth::user()->score;  
         @endphp
         <div class="co_score">
             <img class="dia_img" src="{{ asset('images/diamond.png') }}" alt="Congratulations">
-            <p class="user-score">{{ Auth::user()->score }}</p>
+            <p class="user-score" id="userScore">{{ Auth::user()->score }}</p>
         </div>
         <!-- Help Button -->
         <button id="helpBtn">Help</button>
@@ -60,7 +58,6 @@
 
         <!-- Page Content -->
         <main>
-     
             <div class="wrapper">
                 <!-- Nouvelles cellules draggable à gauche -->
                 <div class="draggable-container">
@@ -191,156 +188,128 @@
         </div>
     </main>
 
+    <button id="submitBtn" class="submit-button">Submit</button>
+</main>
+<script>
+            $(document).ready(function() {
+                var score = 0;
+                var cellAttempts = {};
 
+                $(".draggable").draggable({
+                    revert: "invalid",
+                    zIndex: 100,
+                    scroll: false
+                });
 
-
-
-            <button id="submitBtn" class="submit-button">Submit</button>
-        </main>
-
-        <script>
-    $(document).ready(function() {
-        $(".draggable").draggable({
-            revert: "invalid",
-            zIndex: 100,
-            scroll: false
-        });
-
-        $(".droppable").droppable({
-            accept: ".draggable",
-            drop: function(event, ui) {
-                $(this).append(ui.helper.css({
-                    left: 0,
-                    top: 0,
-                    position: "relative"
-                }));
-            }
-        });
-
-        // Set up CSRF token for all AJAX requests
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        var correctAnswers = {
-            "cell1": "Value Propositions",
-            "cell2": "Customer Segments",
-            "cell3": "Channels",
-            "cell4": "Customer Relationships",
-            "cell5": "Revenue Streams",
-            "cell6": "Key Resources",
-            "cell7": "Key Activities",
-            "cell8": "Key Partnerships",
-            "cell9": "Cost Structure"
-            
-        };
-      
-        var attempts = 1; // Initialize attempts counter
-        var maxAttempts = 3;
-        var score = 0;
-
-        // Function to check answers on submit
-        $("#submitBtn").click(function() {
-            var userAnswers = {};
-            var correctCount = 0;
-
-            $(".droppable").each(function() {
-                var cellId = $(this).children(".draggable").attr("id");
-                var category = $(this).data("category");
-                userAnswers[cellId] = category;
-
-                if (correctAnswers[cellId] === category) {
-                    correctCount++;
-                }
-            });
-
-            if (correctCount === Object.keys(correctAnswers).length) {
-                if (attempts === 1) {
-                    score = 5;
-                } else if (attempts === 2) {
-                    score = 3;
-                } else if (attempts === 3) {
-                    score = 1;
-                }
-                alert("Congratulations! All answers are correct. Score: " + score + " Points. Attempts: " + attempts);
-
-                // Redirection vers une autre page après avoir terminé avec succès
-                window.location.href='FinExercice'
-               // window.location.href = "{{ route('FinExercice') }}"; // Assurez-vous que cette route correspond à la route définie dans web.php
-            } else {
-                if (attempts < maxAttempts) {
-                    alert("Some answers are incorrect. Correct Answers: " + correctCount + " / " + Object.keys(correctAnswers).length + ". Attempts: " + attempts);
-                    attempts++;
-                } else {
-                    alert("Incorrect answers on the third attempt. The correct answers will now be displayed.");
-
-                    // Afficher les réponses correctes après avoir épuisé les tentatives
-                    $(".droppable").each(function() {
-                        var cellId = $(this).children(".draggable").attr("id");
-                        if (correctAnswers[cellId] !== $(this).data("category")) {
-                            $(this).append($("#" + cellId).css({ left: 0, top: 0, position: "relative" }));
-                        }
-                    });
-                    $(".droppable").each(function() {
+                $(".droppable").droppable({
+                    accept: ".draggable",
+                    drop: function(event, ui) {
+                        var cellId = ui.helper.attr("id");
                         var category = $(this).data("category");
-                        var correctCellId = Object.keys(correctAnswers).find(key => correctAnswers[key] === category);
-                        if (correctCellId) {
-                            $(this).append($("#" + correctCellId).css({ left: 0, top: 0, position: "relative" }));
+
+                        if (!cellAttempts[cellId]) {
+                            cellAttempts[cellId] = 0;
+                        }
+
+                        cellAttempts[cellId]++;
+
+                        if (correctAnswers[cellId] === category) {
+                            ui.helper.css({
+                                left: 0,
+                                top: 0,
+                                position: "relative"
+                            }).appendTo($(this));
+
+                            var points = 0;
+                            if (cellAttempts[cellId] === 1) {
+                                points = 5;
+                            } else if (cellAttempts[cellId] === 2) {
+                                points = 3;
+                            } else if (cellAttempts[cellId] === 3) {
+                                points = 1;
+                            } else if (cellAttempts[cellId] === 4) {
+                                points = -1;
+                            } else if (cellAttempts[cellId] === 5) {
+                                points = -2;
+                            }
+                            score += points;
+                            delete cellAttempts[cellId];  // Reset attempts after correct drop
+                            alert("Correct! Points for this cell: " + points + ". Total score: " + score);
+                        } else {
+                            ui.helper.draggable("option", "revert", true);
+                            if (cellAttempts[cellId] >= 5) {
+                                alert("Max attempts reached for this cell.");
+                            }
+                        }
+                    }
+                });
+
+                var correctAnswers = {
+                    "cell1": "Value Propositions",
+                    "cell2": "Customer Segments",
+                    "cell3": "Channels",
+                    "cell4": "Customer Relationships",
+                    "cell5": "Revenue Streams",
+                    "cell6": "Key Resources",
+                    "cell7": "Key Activities",
+                    "cell8": "Key Partnerships",
+                    "cell9": "Cost Structure"
+                };
+
+                $("#submitBtn").click(function() {
+                    // Save the score to the database
+                    $.ajax({
+                        url: '/save-score',
+                        type: 'POST',
+                        data: {
+                            score: score
+                        },
+                        success: function(response) {
+                            alert('Score saved successfully! Total score: ' + score);
+                            window.location.href = 'FinExercice';
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Error: ' + error);
                         }
                     });
-                }
-            }
+                });
 
-            // Vous pouvez conserver votre code AJAX ici si nécessaire
-            $.ajax({
-    url: '/check-answers', // URL de l'itinéraire définie dans web.php
-    type: 'POST',
-    data: {
-        userAnswers: userAnswers,
-        attempts: attempts
-    },
-    success: function(response) {
-        if (response.allCorrect) {
-            alert(response.message + " Your total score is: " + response.score);
+                // Help Button Click Event
+                $("#helpBtn").click(function() {
+                    $("#popup").css("display", "block");
+                });
 
-            // Redirection vers une autre page après avoir terminé avec succès
-            window.location.href = 'FinExercice';
-        } else {
-            if (attempts < maxAttempts) {
-                alert(response.message + " Attempts: " + attempts);
-                attempts++;
-            } else {
-                alert("Incorrect answers on the third attempt. The correct answers will now be displayed.");
+                // Close Popup
+                $(".close").click(function() {
+                    $("#popup").css("display", "none");
+                });
 
-                // Afficher les réponses correctes après avoir épuisé les tentatives
-                $(".droppable").each(function() {
-                    var cellId = $(this).children(".draggable").attr("id");
-                    if (correctAnswers[cellId] !== $(this).data("category")) {
-                        $(this).append($("#" + cellId).css({ left: 0, top: 0, position: "relative" }));
+                // Close Popup When Clicking Outside of It
+                $(window).click(function(event) {
+                    if (event.target == $("#popup")[0]) {
+                        $("#popup").css("display", "none");
                     }
                 });
-                $(".droppable").each(function() {
-                    var category = $(this).data("category");
-                    var correctCellId = Object.keys(correctAnswers).find(key => correctAnswers[key] === category);
-                    if (correctCellId) {
-                        $(this).append($("#" + correctCellId).css({ left: 0, top: 0, position: "relative" }));
+
+                // Learn More Button Click Event
+                $(".learn-more-btn").click(function() {
+                    var popupId = $(this).siblings(".popup").attr("id");
+                    $("#" + popupId).css("display", "block");
+                });
+
+                // Close Learn More Popup
+                $(".popup .close").click(function() {
+                    $(this).parent().parent().css("display", "none");
+                });
+
+                // Close Learn More Popup When Clicking Outside of It
+                $(window).click(function(event) {
+                    if ($(event.target).hasClass("popup")) {
+                        $(event.target).css("display", "none");
                     }
                 });
-            }
-        }
-    },
-    error: function(xhr, status, error) {
-        alert('Error: ' + error);
-    }
-});
+            });
+        </script>
 
-        });
-    });
-</script>
-
-
-
-    </body>
+</body>
 </x-app-layout>
