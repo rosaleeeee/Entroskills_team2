@@ -13,6 +13,7 @@ class CreateIdeasTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('title');
             $table->text('description');
+            $table->integer('votes');
             $table->timestamps();
         });
     }
