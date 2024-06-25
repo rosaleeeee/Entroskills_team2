@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AffectMbtiController extends Controller
-{
+{ 
     public function index()
     {
         $users = User::take(9)->get();
