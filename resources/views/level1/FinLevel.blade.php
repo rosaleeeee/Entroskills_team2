@@ -9,10 +9,10 @@
     @include('layouts.sidebar')
     <div class="container">
         <div class="icon">
-            <img class="image_start" src="{{ asset('images/BM.png') }}" alt="Business Model Icon">
+            <img class="image_end" src="{{ asset('images/bravo.gif') }}" alt="Business Model Icon">
         </div>
-        <h1>BUSINESS MODEL</h1>
-        <button class="start-button" onclick="window.location.href='BUSINESSMODEL'">start</button>
+       
+        <button class="start-button" onclick="window.location.href='dashboard'">next</button>
     </div>
 </body>
  

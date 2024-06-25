@@ -10,6 +10,8 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\RecController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\BusinessModelController;
+use App\Http\Controllers\ExerciseController;
+
 
 
 
@@ -146,6 +148,20 @@ Route::get('/admin-ranking', [AdminRankingController::class, 'index'])->name('ad
 Route::post('/check-answers', [GameController::class, 'checkAnswers']);
 require __DIR__.'/auth.php';
 
+Route::get('/level1/FinExercice', function () {
+    return view('level1.FinExercice');
+})->name('FinExercice');
+
+Route::get('/level1/StartExercice', function () {
+    return view('level1.StartExercice');
+})->name('StartExercice');
+
+Route::get('/level1/ExerciceBUSINESSMODEL', function () {
+    return view('level1.ExerciceBUSINESSMODEL');
+})->name('ExerciceBUSINESSMODEL');
 
 
+Route::get('/level1/FinLevel', function () {
+    return view('level1.FinLevel');
+})->name('FinLevel');
 

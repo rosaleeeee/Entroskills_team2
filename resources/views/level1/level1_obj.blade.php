@@ -2,16 +2,12 @@
     
             <!-- Page Content -->
 
-            <main>
-    <div style="width: 100px; ; color: black; padding: 20px;">
-        <!-- start navbar --> 
+   
     @include('layouts.sidebar')
 
 <!-- end navbar -->   
-</div>
-<link href="{{ asset('level-obj.css') }}" rel="stylesheet">
 
-</head>
+<link href="{{ asset('level-obj.css') }}" rel="stylesheet">
 <body>
     <div id="content">
         <div id="left">

@@ -1,120 +1,67 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BusinessModel;
-use App\Models\User;
-use Auth;
-use App\Jobs\SendMessage;
-use App\Models\Message;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 
 class BusinessModelController extends Controller
 {
-    
-
-    public function store(Request $request)
+    public function checkAnswers(Request $request)
     {
-        $request->validate([
-            'key_partnerships' => 'nullable|string',
-            'key_activities' => 'nullable|string',
-            'key_resources' => 'nullable|string',
-            'value_propositions' => 'nullable|string',
-            'customer_relationships' => 'nullable|string',
-            'customer_segments' => 'nullable|string',
-            'channels' => 'nullable|string',
-            'cost_structure' => 'nullable|string',
-            'revenue_streams' => 'nullable|string',
+        $correctAnswers = [
+            "cell1" => "Value Propositions",
+            "cell2" => "Customer Segments",
+            "cell3" => "Channels",
+            "cell4" => "Customer Relationships",
+            "cell5" => "Revenue Streams",
+            "cell6" => "Key Resources",
+            "cell7" => "Key Activities",
+            "cell8" => "Key Partnerships",
+            "cell9" => "Cost Structure"
+        ];
+
+        public function Score($id)
+        {
+            $user = Auth::user();
+       
+        $userAnswers = $request->input('userAnswers');
+        $attempts = $request->input('attempts');
+       
+
+        $correctCount = 0;
+        foreach ($correctAnswers as $cellId => $correctAnswer) {
+            if (isset($userAnswers[$cellId]) && $userAnswers[$cellId] === $correctAnswer) {
+                $correctCount++;
+            }
+        }
+
+
+        if ($correctCount === count($correctAnswers)) {
+            if ($attempts === 1) {
+                $user->score += 5;
+            } elseif ($attempts === 2) {
+                $user->score += 3;
+            } elseif ($attempts === 3) {
+                $user->score += 1;
+            }
+        } else {
+            if ($attempts >= 4) {
+                $user->score -= 1; // Score de pénalité pour plus de 3 tentatives
+            }
+        }
+      
+       
+
+
+        return response()->json([
+            'allCorrect' => $correctCount === count($correctAnswers),
+            'message' => $correctCount === count($correctAnswers) 
+                        ? "Congratulations! All answers are correct. Score: {$scoreToAdd} Points."
+                        : "Some answers are incorrect. Correct Answers: {$correctCount} / " . count($correctAnswers),
+            'attempts' => $attempts,
+            'score' => $user->score
         ]);
-
-        // Pour déboguer, afficher les données reçues du formulaire
-
-        // Enregistrer les données du modèle d'affaires
-        BusinessModel::updateOrCreate(
-            ['user_id' => Auth::id()],
-            [
-                'key_partnerships' => $request->key_partnerships,
-                'key_activities' => $request->key_activities,
-                'key_resources' => $request->key_resources,
-                'value_propositions' => $request->value_propositions,
-                'customer_relationships' => $request->customer_relationships,
-                'customer_segments' => $request->customer_segments,
-                'channels' => $request->channels,
-                'cost_structure' => $request->cost_structure,
-                'revenue_streams' => $request->revenue_streams,
-                'completed' => true,
-            ]
-        );
-
-        return redirect()->route('business_model.wait');
-    }
-
-    public function result()
-{
-    $completedModels = BusinessModel::where('completed', true)->count();
-
-    // Vérifier si tous les utilisateurs ont complété le modèle d'affaires
-    if ($completedModels >= 9) {
-        $businessModels = BusinessModel::all();
-        return view('level2.result', compact('businessModels')); // Nom de la vue corrigé
-    } else {
-        // Rediriger ou afficher un message d'erreur selon votre besoin
-        return redirect()->route('business_model.create')->with('error', 'Vous ne pouvez pas accéder aux résultats tant que tous les utilisateurs n\'ont pas rempli le Business Model Canvas.');
     }
 }
-public function wait()
-{
-    return view('level2.wait');
-}
-public function checkCompletion()
-{
-    $completedModels = BusinessModel::where('completed', true)->count();
-
-    return response()->json([
-        'allCompleted' => $completedModels >= 9
-    ]);
 }
 
-
-
-
-
-public function __construct() {
-    $this->middleware('auth');
-}
-
-public function create() {
-    $user = User::where('id', auth()->id())->select([
-        'id', 'name', 'email',
-    ])->first();
-
-    return view('level2.use_case', [
-        'user' => $user,
-    ]);
-}
-
-public function messages(): JsonResponse {
-    $messages = Message::with('user')->get()->append('time');
-
-    return response()->json($messages);
-}
-
-public function message(Request $request): JsonResponse {
-    $message = Message::create([
-        'user_id' => auth()->id(),
-        'text' => $request->get('text'),
-    ]);
-    SendMessage::dispatch($message);
-
-    return response()->json([
-        'success' => true,
-        'message' => "Message created and job dispatched.",
-    ]);
-}
-
-
-
-
-
-}

@@ -9,8 +9,6 @@
     <body>
         @include('layouts.sidebar')
         <!-- Affichage du score en haut de la page -->
-      
-
         @php
         $userScore = Auth::user()->score;  
         @endphp
@@ -60,45 +58,7 @@
 
         <!-- Page Content -->
         <main>
-     
             <div class="wrapper">
-                <!-- Nouvelles cellules draggable à gauche -->
-                <div class="draggable-container">
-                    <div class="draggable-column">
-                        <div class="draggable" id="cell1">
-                            <h3>Unique offerings creating customer value.</h3>
-                            <button class="learn-more-btn">Learn More</button>
-                            <div id="popup1" class="popup">
-                                <div class="popup-content">
-                                    <span class="close">&times;</span>
-                                    <h2>Details</h2>
-                                    <p>The unique combination of products or services that create value for specific customer segments, addressing their needs or solving their problems better than competitors.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="draggable" id="cell2">
-                            <h3>Targeted groups for products/services.</h3>
-                            <button class="learn-more-btn">Learn More</button>
-                            <div id="popup2" class="popup">
-                                <div class="popup-content">
-                                    <span class="close">&times;</span>
-                                    <h2>Details</h2>
-                                    <p>The types of interactions and connections a business establishes with its customers to attract, retain, and support them throughout their journey with the company.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="draggable" id="cell3">
-                            <h3>Methods to deliver products/services to customers.</h3>
-                            <button class="learn-more-btn">Learn More</button>
-                            <div id="popup3" class="popup">
-                                <div class="popup-content">
-                                    <span class="close">&times;</span>
-                                    <h2>Details</h2>
-                                    <p>The various ways and platforms through which a business reaches and interacts with its customers to deliver its value proposition, including physical and digital channels.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 <!-- Business Model Canvas (existant) -->
                 <div class="bmc" id="bmc">
                     <div class="droppable" data-category="Key Resources"><h3>Key Resources</h3></div>
@@ -112,88 +72,19 @@
                     <div class="droppable" data-category="Revenue Streams"><h3>Revenue Streams</h3></div>
                 </div>
 
-                <!-- Nouvelles cellules draggable à droite -->
-                <div class="draggable-column">
-                    <div class="draggable" id="cell4">
-                        <h3>Ways to attract and retain customers.</h3>
-                        <button class="learn-more-btn">Learn More</button>
-                        <div id="popup4" class="popup">
-                            <div class="popup-content">
-                                <span class="close">&times;</span>
-                                <h2>Details</h2>
-                                <p>The types of interactions and connections a business establishes with its customers to attract, retain, and support them throughout their journey with the company.</p>
-                            </div>
-                        </div>
+                <!-- Nouvelles cellules draggable en bas -->
+                <div class="draggable-container">
+                    <div class="draggable" id="cell1"><h3>1<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Value Propositions.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell2"><h3>2<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Customer Segments.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell3"><h3>3<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Channels.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell4"><h3>4<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Customer Relationships.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell5"><h3>5<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Revenue Streams.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell6"><h3>6<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Key Resources.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell7"><h3>7<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Key Activities.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell8"><h3>8<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Key Parteners.png') }}" alt="Business Model Icon"></h3></div>
+                    <div class="draggable" id="cell9"><h3>9<img class="BM-Icones" style="height: 80px;" src="{{ asset('images/Cost Structure.png') }}" alt="Business Model Icon"></h3></div>
                     </div>
-                    <div class="draggable" id="cell5">
-                        <h3>Sources generating business income.</h3>
-                        <button class="learn-more-btn">Learn More</button>
-                        <div id="popup5" class="popup">
-                            <div class="popup-content">
-                                <span class="close">&times;</span>
-                                <h2>Details</h2>
-                                <p>The sources through which a business earns income from its customer segments, encompassing different pricing mechanisms, sales models, and monetization strategies.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="draggable" id="cell6">
-                        <h3>Necessary assets for business operations.</h3>
-                        <button class="learn-more-btn">Learn More</button>
-                        <div id="popup6" class="popup">
-                            <div class="popup-content">
-                                <span class="close">&times;</span>
-                                <h2>Details</h2>
-                                <p>The critical assets, whether physical, financial, intellectual, or human, required for a business to operate and deliver its value proposition to customers.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
-
-            <!-- Nouvelles cellules draggable en bas -->
-            <div class="draggable-container">
-                <div class="draggable" id="cell7">
-                    <h3>Essential tasks for creating and delivering value.</h3>
-                    <button class="learn-more-btn">Learn More</button>
-                    <div id="popup7" class="popup">
-                        <div class="popup-content">
-                            <span class="close">&times;</span>
-                            <h2>Details</h2>
-                            <p>Essential tasks and processes that a business must perform to create and deliver its value proposition, reach customers, and sustain its operations effectively.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="draggable" id="cell8">
-                    <h3> External collaborators crucial for business operations.</h3>
-                    <button class="learn-more-btn">Learn More</button>
-                    <div id="popup8" class="popup">
-                        <div class="popup-content">
-                            <span class="close">&times;</span>
-                            <h2> Details</h2>
-                            <p>External entities such as suppliers, business partners, or other companies that collaborate to enhance operational efficiency, mitigate risks, or access additional resources.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="draggable" id="cell9">
-                    <h3>Main expenses for business operations.</h3>
-                    <button class="learn-more-btn">Learn More</button>
-                    <div id="popup9" class="popup">
-                        <div class="popup-content">
-                            <span class="close">&times;</span>
-                            <h2> Details</h2>
-                            <p>The comprehensive breakdown of all costs incurred to operate a business, including fixed and variable expenses, essential for understanding and managing profitability.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-    </main>
-
-
-
-
 
             <button id="submitBtn" class="submit-button">Submit</button>
         </main>
@@ -267,8 +158,8 @@
                 alert("Congratulations! All answers are correct. Score: " + score + " Points. Attempts: " + attempts);
 
                 // Redirection vers une autre page après avoir terminé avec succès
-                window.location.href='FinExercice'
-               // window.location.href = "{{ route('FinExercice') }}"; // Assurez-vous que cette route correspond à la route définie dans web.php
+                window.location.href='FinLevel'
+               // window.location.href = "{{ route('FinLevel') }}"; // Assurez-vous que cette route correspond à la route définie dans web.php
             } else {
                 if (attempts < maxAttempts) {
                     alert("Some answers are incorrect. Correct Answers: " + correctCount + " / " + Object.keys(correctAnswers).length + ". Attempts: " + attempts);

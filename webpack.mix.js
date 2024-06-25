@@ -13,4 +13,5 @@ mix.js('resources/js/app.js', 'public/js')
        .autoload({
            jquery: ['$', 'window.jQuery'], // Ajoutez cette ligne pour charger automatiquement jQuery
        });
-    
+
+      
