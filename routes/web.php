@@ -83,6 +83,8 @@ Route::get('/level3/howtoplay', function () {
 Route::get('/level3/quiz', function () {
     return view('level3.quiz');
 })->middleware(['auth', 'verified'])->name('quiz');
+Route::get('/quiz-start', [MbtiQuizController::class, 'showStart'])->name('quiz.start');
+Route::post('/quiz-start', [MbtiQuizController::class, 'submitStart'])->name('quiz.submitStart');
 
 Route::get('/level4/quiz/show', [MbtiQuizController::class, 'show'])->name('quiz.show');
 Route::post('/level4/quiz/show', [MbtiQuizController::class, 'submit'])->name('quiz.submit');
