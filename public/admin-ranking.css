@@ -1,5 +1,11 @@
+.container{
+    margin-left: 250px;
+    justify-content: center;
+}
 table {
-    width: 100%;
+    width: 80%;
+    border: 1px solid #ddd;
+    border-radius: 20px;
     border-collapse: collapse;
     margin-top: 20px;
 }
@@ -7,10 +13,11 @@ table {
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
+    
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color:#6aade8;
     text-align: left;
 }
 

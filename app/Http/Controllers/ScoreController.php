@@ -10,16 +10,10 @@ class ScoreController extends Controller
     public function saveScore(Request $request)
     {
         $user = Auth::user();
-        $score = $request->input('score');
-        
-        // Mettre à jour le score de l'utilisateur
-        $user->score += $score;
+        $user->score += $request->input('score');
         $user->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Score saved successfully!',
-            'score' => $user->score
-        ]);
+        return response()->json(['success' => true]);
     }
 }
+

@@ -17,6 +17,7 @@ use App\Http\Controllers\ScoreController;
 
 
 
+
 use App\Models\User;
 
 require __DIR__.'/auth.php';
@@ -169,7 +170,6 @@ Route::get('/level1/FinLevel', function () {
     return view('level1.FinLevel');
 })->name('FinLevel');
 
+Route::post('/save-score', [ScoreController::class, 'saveScore'])->name('save.score');
 
-
-Route::post('/save-score', [ScoreController::class, 'saveScore']);
 

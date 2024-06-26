@@ -186,7 +186,7 @@ body {
   
       .draggable {
           cursor: move;
-          height: 125px;
+          height: 135px;
           width: 150px;
           margin: 10px;
           user-select: none;
@@ -208,6 +208,7 @@ body {
       }
      
       
+
       
       .draggable-column {
           display: flex;
@@ -264,3 +265,11 @@ body {
       .submit-button:hover {
           background-color: #ffcc00;
       }
+
+      .correct-drop {
+        background-color: lightgreen !important; /* Utilisation de !important pour s'assurer que la couleur s'applique */
+    }
+    
+    .incorrect-drop {
+        background-color: lightcoral !important;
+    }
