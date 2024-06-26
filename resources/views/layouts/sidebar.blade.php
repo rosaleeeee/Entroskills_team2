@@ -38,7 +38,7 @@
                 </a>
             </li>
             <li  class="Button">
-                <a class="a_nav" href="#">
+                <a class="a_nav" href="http://127.0.0.1:8000/more">
                     <i class="fas fa-ellipsis-h"></i>
                     <span class="nav-item">More</span>
                 </a>

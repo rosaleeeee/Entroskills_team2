@@ -28,34 +28,6 @@
             </div>
         </div>
 
-        <script>
-            // Get the popup
-            var popup = document.getElementById('popup');
-
-            // Get the button that opens the popup
-            var btn = document.getElementById('helpBtn');
-
-            // Get the <span> element that closes the popup
-            var span = document.getElementsByClassName('close')[0];
-
-            // When the user clicks the button, open the popup
-            btn.onclick = function() {
-                popup.style.display = 'block';
-            }
-
-            // When the user clicks on <span> (x), close the popup
-            span.onclick = function() {
-                popup.style.display = 'none';
-            }
-
-            // When the user clicks anywhere outside of the popup, close it
-            window.onclick = function(event) {
-                if (event.target == popup) {
-                    popup.style.display = 'none';
-                }
-            }
-        </script>
-
         <!-- Page Content -->
         <main>
             <div class="wrapper">
@@ -191,125 +163,140 @@
     <button id="submitBtn" class="submit-button">Submit</button>
 </main>
 <script>
-            $(document).ready(function() {
-                var score = 0;
-                var cellAttempts = {};
+    $(document).ready(function() {
+        var score = 0;
+        var cellAttempts = {};
+        var maxAttempts = 5;
 
-                $(".draggable").draggable({
-                    revert: "invalid",
-                    zIndex: 100,
-                    scroll: false
-                });
+        $(".draggable").draggable({
+            revert: "invalid",
+            stack: ".draggable"
+        });
 
-                $(".droppable").droppable({
-                    accept: ".draggable",
-                    drop: function(event, ui) {
-                        var cellId = ui.helper.attr("id");
-                        var category = $(this).data("category");
+        $(".droppable").droppable({
+            accept: ".draggable",
+            drop: function(event, ui) {
+                var cellId = ui.helper.attr("id");
+                var category = $(this).data("category");
 
-                        if (!cellAttempts[cellId]) {
-                            cellAttempts[cellId] = 0;
-                        }
+                if (!cellAttempts[cellId]) {
+                    cellAttempts[cellId] = 0;
+                }
 
-                        cellAttempts[cellId]++;
+                cellAttempts[cellId]++;
 
-                        if (correctAnswers[cellId] === category) {
-                            ui.helper.css({
-                                left: 0,
-                                top: 0,
-                                position: "relative"
-                            }).appendTo($(this));
+                if (correctAnswers[cellId] === category) {
+                    ui.helper.css({
+                        left: 0,
+                        top: 0,
+                        position: "relative"
+                    }).appendTo($(this));
 
-                            var points = 0;
-                            if (cellAttempts[cellId] === 1) {
-                                points = 5;
-                            } else if (cellAttempts[cellId] === 2) {
-                                points = 3;
-                            } else if (cellAttempts[cellId] === 3) {
-                                points = 1;
-                            } else if (cellAttempts[cellId] === 4) {
-                                points = -1;
-                            } else if (cellAttempts[cellId] === 5) {
-                                points = -2;
-                            }
-                            score += points;
-                            delete cellAttempts[cellId];  // Reset attempts after correct drop
-                            alert("Correct! Points for this cell: " + points + ". Total score: " + score);
-                        } else {
-                            ui.helper.draggable("option", "revert", true);
-                            if (cellAttempts[cellId] >= 5) {
-                                alert("Max attempts reached for this cell.");
-                            }
-                        }
+                    var points = 0;
+                    if (cellAttempts[cellId] === 1) {
+                        points = 5;
+                    } else if (cellAttempts[cellId] === 2) {
+                        points = 3;
+                    } else if (cellAttempts[cellId] === 3) {
+                        points = 1;
+                    } else if (cellAttempts[cellId] === 4) {
+                        points = -1;
+                    } else if (cellAttempts[cellId] === 5) {
+                        points = -2;
                     }
-                });
-
-                var correctAnswers = {
-                    "cell1": "Value Propositions",
-                    "cell2": "Customer Segments",
-                    "cell3": "Channels",
-                    "cell4": "Customer Relationships",
-                    "cell5": "Revenue Streams",
-                    "cell6": "Key Resources",
-                    "cell7": "Key Activities",
-                    "cell8": "Key Partnerships",
-                    "cell9": "Cost Structure"
-                };
-
-                $("#submitBtn").click(function() {
-                    // Save the score to the database
-                    $.ajax({
-                        url: '/save-score',
-                        type: 'POST',
-                        data: {
-                            score: score
-                        },
-                        success: function(response) {
-                            alert('Score saved successfully! Total score: ' + score);
-                            window.location.href = 'FinExercice';
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error: ' + error);
-                        }
-                    });
-                });
-
-                // Help Button Click Event
-                $("#helpBtn").click(function() {
-                    $("#popup").css("display", "block");
-                });
-
-                // Close Popup
-                $(".close").click(function() {
-                    $("#popup").css("display", "none");
-                });
-
-                // Close Popup When Clicking Outside of It
-                $(window).click(function(event) {
-                    if (event.target == $("#popup")[0]) {
-                        $("#popup").css("display", "none");
+                    score += points;
+                    delete cellAttempts[cellId];  // Reset attempts after correct drop
+                    alert("Correct! Points for this cell: " + points + ". Total score: " + score);
+                } else {
+                    if (cellAttempts[cellId] >= maxAttempts) {
+                        score -= 2;
+                        ui.helper.css({
+                            left: 0,
+                            top: 0,
+                            position: "relative"
+                        }).appendTo($(".droppable[data-category='" + correctAnswers[cellId] + "']"));
+                        delete cellAttempts[cellId];  // Reset attempts after max attempts
+                        alert("Max attempts reached for this cell. You lost 2 points. Total score: " + score);
+                    } else {
+                        ui.helper.draggable("option", "revert", true);
+                        
                     }
-                });
+                }
+            }
+        });
 
-                // Learn More Button Click Event
-                $(".learn-more-btn").click(function() {
-                    var popupId = $(this).siblings(".popup").attr("id");
-                    $("#" + popupId).css("display", "block");
-                });
+        var correctAnswers = {
+            "cell1": "Value Propositions",
+            "cell2": "Customer Segments",
+            "cell3": "Channels",
+            "cell4": "Customer Relationships",
+            "cell5": "Revenue Streams",
+            "cell6": "Key Resources",
+            "cell7": "Key Activities",
+            "cell8": "Key Partnerships",
+            "cell9": "Cost Structure"
+        };
 
-                // Close Learn More Popup
-                $(".popup .close").click(function() {
-                    $(this).parent().parent().css("display", "none");
-                });
-
-                // Close Learn More Popup When Clicking Outside of It
-                $(window).click(function(event) {
-                    if ($(event.target).hasClass("popup")) {
-                        $(event.target).css("display", "none");
+        $("#submitBtn").click(function() {
+            // Save the score to the database
+            $.ajax({
+                url: '{{ route("save.score") }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    score: score
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Score saved successfully! Total score: ' + score);
+                        window.location.href = 'FinExercice';
+                    } else {
+                        alert('Error: Could not save the score.');
                     }
-                });
+                },
+                error: function(xhr, status, error) {
+                    alert('Error: ' + error);
+                }
             });
-        </script>
+        });
+
+        // Help Button Click Event
+        $("#helpBtn").click(function() {
+            $("#popup").css("display", "block");
+        });
+
+        // Close Popup
+        $(".close").click(function() {
+            $(this).closest(".popup").css("display", "none");
+        });
+
+        // Close Popup When Clicking Outside of It
+        $(window).click(function(event) {
+            if ($(event.target).hasClass("popup")) {
+                $(event.target).css("display", "none");
+            }
+        });
+
+        // Learn More Button Click Event
+        $(".learn-more-btn").click(function() {
+            var popup = $(this).siblings(".popup");
+            popup.css("display", "block");
+        });
+
+        // Close Learn More Popup
+        $(".popup .close").click(function() {
+            $(this).closest(".popup").css("display", "none");
+        });
+
+        // Close Learn More Popup When Clicking Outside of It
+        $(window).click(function(event) {
+            if ($(event.target).hasClass("popup")) {
+                $(event.target).css("display", "none");
+            }
+        });
+    });
+</script>
+
 
 </body>
 </x-app-layout>
