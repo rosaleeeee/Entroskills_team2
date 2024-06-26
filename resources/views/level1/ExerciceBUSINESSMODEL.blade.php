@@ -89,7 +89,20 @@
             <button id="submitBtn" class="submit-button">Submit</button>
         </main>
 
-        <script>
+        <!-- Bouton de soumission -->
+    <button id="submitBtn" class="submit-button">Submit</button>
+
+<audio id="correctSound">
+<source src="{{ asset('sounds/correct-answer.mp3') }}" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<audio id="wrongSound">
+<source src="{{ asset('sounds/wrong-answer.mp3') }}" type="audio/mpeg">
+Your browser does not support the audio element.
+</audio>
+
+<script>
     $(document).ready(function() {
         var score = 0;
         var cellAttempts = {};
@@ -97,7 +110,8 @@
 
         $(".draggable").draggable({
             revert: "invalid",
-            stack: ".draggable"
+            stack: ".draggable",
+            cursor: "move"
         });
 
         $(".droppable").droppable({
@@ -132,8 +146,15 @@
                         points = -2;
                     }
                     score += points;
-                    delete cellAttempts[cellId];  // Reset attempts after correct drop
+                    delete cellAttempts[cellId];  // Réinitialiser les tentatives après un placement correct
                     alert("Correct! Points for this cell: " + points + ". Total score: " + score);
+
+                    // Jouer le son de réponse correcte
+                    var correctSound = document.getElementById("correctSound");
+                    correctSound.play();
+
+                    // Ajouter une classe pour l'animation de couleur
+                    ui.helper.addClass("correct-drop");
                 } else {
                     if (cellAttempts[cellId] >= maxAttempts) {
                         score -= 2;
@@ -142,13 +163,25 @@
                             top: 0,
                             position: "relative"
                         }).appendTo($(".droppable[data-category='" + correctAnswers[cellId] + "']"));
-                        delete cellAttempts[cellId];  // Reset attempts after max attempts
+                        delete cellAttempts[cellId];  // Réinitialiser les tentatives après le nombre maximal d'essais
                         alert("Max attempts reached for this cell. You lost 2 points. Total score: " + score);
                     } else {
+                        // Jouer le son de réponse incorrecte
+                        var wrongSound = document.getElementById("wrongSound");
+                        wrongSound.play();
+
                         ui.helper.draggable("option", "revert", true);
                         
+
+                        // Ajouter une classe pour l'animation de couleur
+                        ui.helper.addClass("incorrect-drop");
                     }
                 }
+
+                // Retour à la couleur d'origine après un court délai
+                setTimeout(function() {
+                    ui.helper.removeClass("correct-drop incorrect-drop");
+                }, 1000); // Délai en millisecondes
             }
         });
 
@@ -165,7 +198,7 @@
         };
 
         $("#submitBtn").click(function() {
-            // Save the score to the database
+            // Sauvegarder le score dans la base de données
             $.ajax({
                 url: '{{ route("save.score") }}',
                 type: 'POST',
@@ -187,35 +220,35 @@
             });
         });
 
-        // Help Button Click Event
+        // Bouton d'aide
         $("#helpBtn").click(function() {
             $("#popup").css("display", "block");
         });
 
-        // Close Popup
+        // Fermeture du popup
         $(".close").click(function() {
             $(this).closest(".popup").css("display", "none");
         });
 
-        // Close Popup When Clicking Outside of It
+        // Fermeture du popup en cliquant à l'extérieur
         $(window).click(function(event) {
             if ($(event.target).hasClass("popup")) {
                 $(event.target).css("display", "none");
             }
         });
 
-        // Learn More Button Click Event
+        // Bouton "Learn More"
         $(".learn-more-btn").click(function() {
             var popup = $(this).siblings(".popup");
             popup.css("display", "block");
         });
 
-        // Close Learn More Popup
+        // Fermeture du popup "Learn More"
         $(".popup .close").click(function() {
             $(this).closest(".popup").css("display", "none");
         });
 
-        // Close Learn More Popup When Clicking Outside of It
+        // Fermeture du popup "Learn More" en cliquant à l'extérieur
         $(window).click(function(event) {
             if ($(event.target).hasClass("popup")) {
                 $(event.target).css("display", "none");
@@ -223,9 +256,4 @@
         });
     });
 </script>
-
-
-
-
-    </body>
-</x-app-layout>
+</body>

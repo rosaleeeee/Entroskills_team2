@@ -10,6 +10,25 @@ body {
     margin-top: 0px;
     margin-left: 200px;
 }
+
+.co_score {
+display: flex;
+align-items: center;
+justify-content: flex-end;
+margin-bottom: 10px;
+}
+
+.user-score {
+font-size: 18px;
+font-weight: 600;
+margin-left: 10px; /* Espace entre l'image et le score */
+margin-right: 100px;
+}
+
+.dia_img {
+width: 30px;
+}
+
 #left {
     flex: 1;
     padding-right: 20px;

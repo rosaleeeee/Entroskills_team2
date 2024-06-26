@@ -16,7 +16,7 @@ body {
       font-size: 18px;
       font-weight: 600;
       margin-left: 10px; /* Espace entre l'image et le score */
-      margin-right: 20px;
+      margin-right: 100px;
   }
   
   .dia_img {
@@ -256,10 +256,12 @@ body {
           color: #000;
           border-radius: 25px;
           cursor: pointer;
+          width: 150px;
           display: inline-flex;
           align-items: center;
           margin-top: 20px;
-          justify-content:right;
+          justify-content:center;
+          margin-left: 700px;
       }
   
       .submit-button:hover {
@@ -268,8 +270,10 @@ body {
 
       .correct-drop {
         background-color: lightgreen !important; /* Utilisation de !important pour s'assurer que la couleur s'applique */
+        transition: background-color 1s ease;
     }
     
     .incorrect-drop {
         background-color: lightcoral !important;
+        transition: background-color 1s ease;
     }
