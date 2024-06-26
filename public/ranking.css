@@ -1,5 +1,9 @@
+h1{
+    margin-left: 250px;  
+}
 table {
-    width: 100%;
+    width: 80%;
+    margin-left: 250px;
     border-collapse: collapse;
     margin-top: 20px;
 }
