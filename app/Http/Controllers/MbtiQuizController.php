@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\MbtiDetail;
 
 class MbtiQuizController extends Controller
 {
@@ -134,17 +135,18 @@ class MbtiQuizController extends Controller
             "Spontaneity" => "P"
         ],
     ];
-    
 
-    public function show()
+    public function showStart()
     {
-        return view('level4.quiz.show', ['questions' => $this->questions]);
+        return view('level4.quiz.newmbti', ['questions' => array_slice($this->questions, 0, 10)]);
     }
 
-    public function submit(Request $request)
+    public function submitStart(Request $request)
     {
         $data = $request->all();
-        $results = [
+
+        // Calcul des résultats de la première partie
+        $startResults = [
             'E' => 0,
             'I' => 0,
             'S' => 0,
@@ -155,31 +157,101 @@ class MbtiQuizController extends Controller
             'P' => 0,
         ];
 
-        // Traiter chaque question
-        foreach ($this->questions as $question => $answers) {
+        foreach (array_slice($this->questions, 0, 10) as $question => $answers) {
             $key = str_replace(' ', '_', strtolower($question));
             if (isset($data[$key])) {
-                $results[$data[$key]]++;
+                $startResults[$data[$key]]++;
             } else {
-                // Gérer les réponses manquantes
                 return redirect()->back()->withErrors(['message' => 'Please answer all the questions.']);
             }
         }
 
-        // Calculer le type MBTI
-        $mbti_type = '';
-        $mbti_type .= $results['E'] >= $results['I'] ? 'E' : 'I';
-        $mbti_type .= $results['N'] >= $results['S'] ? 'N' : 'S';
-        $mbti_type .= $results['F'] >= $results['T'] ? 'F' : 'T';
-        $mbti_type .= $results['P'] >= $results['J'] ? 'P' : 'J';
-
-        // Mettre à jour le type MBTI de l'utilisateur
+        // Enregistrement des résultats de la première partie dans la base de données
         $user = Auth::user();
+        $mbtiDetail = MbtiDetail::updateOrCreate(
+            ['user_id' => $user->id],
+            [
+                'E_start' => $startResults['E'],
+                'I_start' => $startResults['I'],
+                'S_start' => $startResults['S'],
+                'N_start' => $startResults['N'],
+                'T_start' => $startResults['T'],
+                'F_start' => $startResults['F'],
+                'J_start' => $startResults['J'],
+                'P_start' => $startResults['P'],
+            ]
+        );
+
+        // Redirection vers le tableau de bord
+        return redirect()->route('dashboard');
+    }
+
+    public function show()
+    {
+        return view('level4.quiz.show', ['questions' => array_slice($this->questions, 10)]);
+    }
+
+    public function submit(Request $request)
+    {
+        $data = $request->all();
+        $level4Results = [
+            'E' => 0,
+            'I' => 0,
+            'S' => 0,
+            'N' => 0,
+            'T' => 0,
+            'F' => 0,
+            'J' => 0,
+            'P' => 0,
+        ];
+
+        foreach (array_slice($this->questions, 10) as $question => $answers) {
+            $key = str_replace(' ', '_', strtolower($question));
+            if (isset($data[$key])) {
+                $level4Results[$data[$key]]++;
+            } else {
+                return redirect()->back()->withErrors(['message' => 'Please answer all the questions.']);
+            }
+        }
+
+        $user = Auth::user();
+        $mbtiDetail = MbtiDetail::where('user_id', $user->id)->first();
+
+        $totalResults = [
+            'E' => $mbtiDetail->E_start + $level4Results['E'],
+            'I' => $mbtiDetail->I_start + $level4Results['I'],
+            'S' => $mbtiDetail->S_start + $level4Results['S'],
+            'N' => $mbtiDetail->N_start + $level4Results['N'],
+            'T' => $mbtiDetail->T_start + $level4Results['T'],
+            'F' => $mbtiDetail->F_start + $level4Results['F'],
+            'J' => $mbtiDetail->J_start + $level4Results['J'],
+            'P' => $mbtiDetail->P_start + $level4Results['P'],
+        ];
+
+        $mbti_type = '';
+        $mbti_type .= $totalResults['E'] >= $totalResults['I'] ? 'E' : 'I';
+        $mbti_type .= $totalResults['N'] >= $totalResults['S'] ? 'N' : 'S';
+        $mbti_type .= $totalResults['F'] >= $totalResults['T'] ? 'F' : 'T';
+        $mbti_type .= $totalResults['P'] >= $totalResults['J'] ? 'P' : 'J';
+
         $user->mbti_type = $mbti_type;
         $user->save();
 
-        // Rediriger vers la vue de résultat avec tous les résultats
-        return redirect()->route('quiz.result', compact('mbti_type', 'results'));
+        $mbtiDetail->update([
+            'E_level4' => $level4Results['E'],
+            'I_level4' => $level4Results['I'],
+            'S_level4' => $level4Results['S'],
+            'N_level4' => $level4Results['N'],
+            'T_level4' => $level4Results['T'],
+            'F_level4' => $level4Results['F'],
+            'J_level4' => $level4Results['J'],
+            'P_level4' => $level4Results['P'],
+        ]);
+
+        return redirect()->route('quiz.result', [
+            'mbti_type' => $mbti_type,
+            'totalResults' => $totalResults
+        ]);
     }
 
     public function result(Request $request)
@@ -188,17 +260,17 @@ class MbtiQuizController extends Controller
 
         // Récupérer le type MBTI et les résultats de la requête
         $mbti_type = $request->input('mbti_type');
-        $results = $request->input('results');
+        $totalResults = $request->input('totalResults');
 
         // Extraire chaque résultat individuellement
-        $results_E = $results['E'];
-        $results_I = $results['I'];
-        $results_S = $results['S'];
-        $results_N = $results['N'];
-        $results_T = $results['T'];
-        $results_F = $results['F'];
-        $results_J = $results['J'];
-        $results_P = $results['P'];
+        $results_E = $totalResults['E'];
+        $results_I = $totalResults['I'];
+        $results_S = $totalResults['S'];
+        $results_N = $totalResults['N'];
+        $results_T = $totalResults['T'];
+        $results_F = $totalResults['F'];
+        $results_J = $totalResults['J'];
+        $results_P = $totalResults['P'];
 
         return view('level4.quiz.result', compact('user', 'mbti_type', 'results_E', 'results_I', 'results_S', 'results_N', 'results_T', 'results_F', 'results_J', 'results_P'));
     }

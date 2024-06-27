@@ -6,16 +6,18 @@
     <title>Business Model Canvas</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-    <body>
-        @include('layouts.sidebar')
-        <!-- Affichage du score en haut de la page -->
-        @php
-        $userScore = Auth::user()->score;  
-        @endphp
-        <div class="co_score">
-            <img class="dia_img" src="{{ asset('images/diamond.png') }}" alt="Congratulations">
-            <p class="user-score">{{ Auth::user()->score }}</p>
-        </div>
+</x-app-layout>
+
+<body>
+    @include('layouts.sidebar')
+    <!-- Affichage du score en haut de la page -->
+    @php
+    $userScore = Auth::user()->score;  
+    @endphp
+    <div class="co_score">
+        <img class="dia_img" src="{{ asset('images/diamond.png') }}" alt="Congratulations">
+        <p class="user-score" id="userScore">{{ Auth::user()->score }}</p>
+    </div>
         <!-- Help Button -->
         <button id="helpBtn">Help</button>
 
@@ -89,8 +91,6 @@
             <button id="submitBtn" class="submit-button">Submit</button>
         </main>
 
-        <!-- Bouton de soumission -->
-    <button id="submitBtn" class="submit-button">Submit</button>
 
 <audio id="correctSound">
 <source src="{{ asset('sounds/correct-answer.mp3') }}" type="audio/mpeg">
@@ -103,157 +103,157 @@ Your browser does not support the audio element.
 </audio>
 
 <script>
-    $(document).ready(function() {
-        var score = 0;
-        var cellAttempts = {};
-        var maxAttempts = 5;
+        $(document).ready(function() {
+            var score = 0;
+            var cellAttempts = {};
+            var maxAttempts = 5;
 
-        $(".draggable").draggable({
-            revert: "invalid",
-            stack: ".draggable",
-            cursor: "move"
-        });
+            $(".draggable").draggable({
+                revert: "invalid",
+                stack: ".draggable",
+                cursor: "move"
+            });
 
-        $(".droppable").droppable({
-            accept: ".draggable",
-            drop: function(event, ui) {
-                var cellId = ui.helper.attr("id");
-                var category = $(this).data("category");
+            $(".droppable").droppable({
+                accept: ".draggable",
+                drop: function(event, ui) {
+                    var cellId = ui.helper.attr("id");
+                    var category = $(this).data("category");
 
-                if (!cellAttempts[cellId]) {
-                    cellAttempts[cellId] = 0;
-                }
-
-                cellAttempts[cellId]++;
-
-                if (correctAnswers[cellId] === category) {
-                    ui.helper.css({
-                        left: 0,
-                        top: 0,
-                        position: "relative"
-                    }).appendTo($(this));
-
-                    var points = 0;
-                    if (cellAttempts[cellId] === 1) {
-                        points = 5;
-                    } else if (cellAttempts[cellId] === 2) {
-                        points = 3;
-                    } else if (cellAttempts[cellId] === 3) {
-                        points = 1;
-                    } else if (cellAttempts[cellId] === 4) {
-                        points = -1;
-                    } else if (cellAttempts[cellId] === 5) {
-                        points = -2;
+                    if (!cellAttempts[cellId]) {
+                        cellAttempts[cellId] = 0;
                     }
-                    score += points;
-                    delete cellAttempts[cellId];  // Réinitialiser les tentatives après un placement correct
-                    alert("Correct! Points for this cell: " + points + ". Total score: " + score);
 
-                    // Jouer le son de réponse correcte
-                    var correctSound = document.getElementById("correctSound");
-                    correctSound.play();
+                    cellAttempts[cellId]++;
 
-                    // Ajouter une classe pour l'animation de couleur
-                    ui.helper.addClass("correct-drop");
-                } else {
-                    if (cellAttempts[cellId] >= maxAttempts) {
-                        score -= 2;
+                    if (correctAnswers[cellId] === category) {
                         ui.helper.css({
                             left: 0,
                             top: 0,
                             position: "relative"
-                        }).appendTo($(".droppable[data-category='" + correctAnswers[cellId] + "']"));
-                        delete cellAttempts[cellId];  // Réinitialiser les tentatives après le nombre maximal d'essais
-                        alert("Max attempts reached for this cell. You lost 2 points. Total score: " + score);
-                    } else {
-                        // Jouer le son de réponse incorrecte
-                        var wrongSound = document.getElementById("wrongSound");
-                        wrongSound.play();
+                        }).appendTo($(this));
 
-                        ui.helper.draggable("option", "revert", true);
-                        
+                        var points = 0;
+                        if (cellAttempts[cellId] === 1) {
+                            points = 5;
+                        } else if (cellAttempts[cellId] === 2) {
+                            points = 3;
+                        } else if (cellAttempts[cellId] === 3) {
+                            points = 1;
+                        } else if (cellAttempts[cellId] === 4) {
+                            points = -1;
+                        } else if (cellAttempts[cellId] === 5) {
+                            points = -2;
+                        }
+                        score += points;
+                        delete cellAttempts[cellId];  // Réinitialiser les tentatives après un placement correct
+                        alert("Correct! Points for this cell: " + points + ". Total score: " + score);
+
+                        // Jouer le son de réponse correcte
+                        var correctSound = document.getElementById("correctSound");
+                        correctSound.play();
 
                         // Ajouter une classe pour l'animation de couleur
-                        ui.helper.addClass("incorrect-drop");
-                    }
-                }
-
-                // Retour à la couleur d'origine après un court délai
-                setTimeout(function() {
-                    ui.helper.removeClass("correct-drop incorrect-drop");
-                }, 1000); // Délai en millisecondes
-            }
-        });
-
-        var correctAnswers = {
-            "cell1": "Value Propositions",
-            "cell2": "Customer Segments",
-            "cell3": "Channels",
-            "cell4": "Customer Relationships",
-            "cell5": "Revenue Streams",
-            "cell6": "Key Resources",
-            "cell7": "Key Activities",
-            "cell8": "Key Partnerships",
-            "cell9": "Cost Structure"
-        };
-
-        $("#submitBtn").click(function() {
-            // Sauvegarder le score dans la base de données
-            $.ajax({
-                url: '{{ route("save.score") }}',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    score: score
-                },
-                success: function(response) {
-                    if (response.success) {
-                        alert('Score saved successfully! Total score: ' + score);
-                        window.location.href = 'FinExercice';
+                        ui.helper.addClass("correct-drop");
                     } else {
-                        alert('Error: Could not save the score.');
+                        if (cellAttempts[cellId] >= maxAttempts) {
+                            score -= 3;
+                            ui.helper.css({
+                                left: 0,
+                                top: 0,
+                                position: "relative"
+                            }).appendTo($(".droppable[data-category='" + correctAnswers[cellId] + "']"));
+                            delete cellAttempts[cellId];  // Réinitialiser les tentatives après le nombre maximal d'essais
+                            alert("Max attempts reached for this cell. You lost 2 points. Total score: " + score);
+                        } else {
+                            // Jouer le son de réponse incorrecte
+                            var wrongSound = document.getElementById("wrongSound");
+                            wrongSound.play();
+
+                            ui.helper.draggable("option", "revert", true);
+                            
+
+                            // Ajouter une classe pour l'animation de couleur
+                            ui.helper.addClass("incorrect-drop");
+                        }
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert('Error: ' + error);
+
+                    // Retour à la couleur d'origine après un court délai
+                    setTimeout(function() {
+                        ui.helper.removeClass("correct-drop incorrect-drop");
+                    }, 1000); // Délai en millisecondes
+                }
+            });
+
+            var correctAnswers = {
+                "cell1": "Value Propositions",
+                "cell2": "Customer Segments",
+                "cell3": "Channels",
+                "cell4": "Customer Relationships",
+                "cell5": "Revenue Streams",
+                "cell6": "Key Resources",
+                "cell7": "Key Activities",
+                "cell8": "Key Partnerships",
+                "cell9": "Cost Structure"
+            };
+
+            $("#submitBtn").click(function() {
+                // Sauvegarder le score dans la base de données
+                $.ajax({
+                    url: '{{ route("save.score") }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        score: score
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert('Score saved successfully! Total score: ' + score);
+                            window.location.href = 'FinLevel';
+                        } else {
+                            alert('Error: Could not save the score.');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error: ' + error);
+                    }
+                });
+            });
+
+            // Bouton d'aide
+            $("#helpBtn").click(function() {
+                $("#popup").css("display", "block");
+            });
+
+            // Fermeture du popup
+            $(".close").click(function() {
+                $(this).closest(".popup").css("display", "none");
+            });
+
+            // Fermeture du popup en cliquant à l'extérieur
+            $(window).click(function(event) {
+                if ($(event.target).hasClass("popup")) {
+                    $(event.target).css("display", "none");
+                }
+            });
+
+            // Bouton "Learn More"
+            $(".learn-more-btn").click(function() {
+                var popup = $(this).siblings(".popup");
+                popup.css("display", "block");
+            });
+
+            // Fermeture du popup "Learn More"
+            $(".popup .close").click(function() {
+                $(this).closest(".popup").css("display", "none");
+            });
+
+            // Fermeture du popup "Learn More" en cliquant à l'extérieur
+            $(window).click(function(event) {
+                if ($(event.target).hasClass("popup")) {
+                    $(event.target).css("display", "none");
                 }
             });
         });
-
-        // Bouton d'aide
-        $("#helpBtn").click(function() {
-            $("#popup").css("display", "block");
-        });
-
-        // Fermeture du popup
-        $(".close").click(function() {
-            $(this).closest(".popup").css("display", "none");
-        });
-
-        // Fermeture du popup en cliquant à l'extérieur
-        $(window).click(function(event) {
-            if ($(event.target).hasClass("popup")) {
-                $(event.target).css("display", "none");
-            }
-        });
-
-        // Bouton "Learn More"
-        $(".learn-more-btn").click(function() {
-            var popup = $(this).siblings(".popup");
-            popup.css("display", "block");
-        });
-
-        // Fermeture du popup "Learn More"
-        $(".popup .close").click(function() {
-            $(this).closest(".popup").css("display", "none");
-        });
-
-        // Fermeture du popup "Learn More" en cliquant à l'extérieur
-        $(window).click(function(event) {
-            if ($(event.target).hasClass("popup")) {
-                $(event.target).css("display", "none");
-            }
-        });
-    });
-</script>
+    </script>
 </body>

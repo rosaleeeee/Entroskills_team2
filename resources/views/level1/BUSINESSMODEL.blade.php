@@ -135,7 +135,7 @@
                     </div>
                 </div>
                 <div class="draggable" id="cell8">
-                    <h3>External collaborators crucial for business operations.</h3>
+                    <h3>External collaborators crucial for business operations</h3>
                     <button class="learn-more-btn">Learn More</button>
                     <div id="popup8" class="popup">
                         <div class="popup-content">
@@ -228,7 +228,7 @@
                         ui.helper.addClass("correct-drop");
                     } else {
                         if (cellAttempts[cellId] >= maxAttempts) {
-                            score -= 2;
+                            score -= 3;
                             ui.helper.css({
                                 left: 0,
                                 top: 0,
