@@ -11,6 +11,7 @@ use App\Http\Controllers\RecController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\BusinessModelController;
 use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\BusController;
 use App\Http\Controllers\ScoreController;
 
 
@@ -125,15 +126,15 @@ Route::post('/vote/{id}', [IdeaController::class, 'vote'])->middleware(['auth', 
 Route::get('/winning-idea', [IdeaController::class, 'winningIdea'])->middleware(['auth', 'verified'])->name('ideas.winning');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/business-model/create', [BusinessModelController::class, 'create'])->name('business_model.create');
-    Route::post('/business-model/store', [BusinessModelController::class, 'store'])->name('business_model.store');
-    Route::get('/business-model/wait', [BusinessModelController::class, 'wait'])->name('business_model.wait'); // Ajouter cette ligne
-    Route::get('/business-model/result', [BusinessModelController::class, 'result'])->name('business_model.result');
-    Route::get('/business-model/check-completion', [BusinessModelController::class, 'checkCompletion'])->name('business_model.checkCompletion');
+    Route::get('/business-model/create', [BusController::class, 'create'])->name('business_model.create');
+    Route::post('/business-model/store', [BusController::class, 'store'])->name('business_model.store');
+    Route::get('/business-model/wait', [BusController::class, 'wait'])->name('business_model.wait'); // Ajouter cette ligne
+    Route::get('/business-model/business-model/result', [BusController::class, 'result'])->name('business_model.result');
+    Route::get('/business-model/check-completion', [BusController::class, 'checkCompletion'])->name('business_model.checkCompletion');
 });
 
-Route::get('/messages', [BusinessModelController::class, 'messages'])->middleware(['auth', 'verified'])->name('messages');
-Route::post('/message', [BusinessModelController::class, 'message'])->middleware(['auth', 'verified'])->name('message');
+Route::get('/messages', [BusController::class, 'messages'])->middleware(['auth', 'verified'])->name('messages');
+Route::post('/message', [BusController::class, 'message'])->middleware(['auth', 'verified'])->name('message');
 
 use App\Http\Controllers\GameController;
 Route::get('/level3/modellev3', function () {
@@ -160,7 +161,7 @@ Route::get('/level1/FinExercice', function () {
 Route::get('/level1/StartExercice', function () {
     return view('level1.StartExercice');
 })->name('StartExercice');
-
+ 
 Route::get('/level1/ExerciceBUSINESSMODEL', function () {
     return view('level1.ExerciceBUSINESSMODEL');
 })->name('ExerciceBUSINESSMODEL');

@@ -43,15 +43,6 @@
                     <span class="nav-item">More</span>
                 </a>
             </li>
-            <!-- Ajouter ce code où vous souhaitez afficher le lien -->
-@if(Auth::check() && Auth::user()->email == '1@gmail.com')
-<a href="{{ route('ranking') }}" class="ranking-button">Ranking</a>
-@endif
-<!-- Ajouter ce code où vous souhaitez afficher le lien -->
-@if(Auth::check() && Auth::user()->email == '1@gmail.com')
-    <a href="{{ route('admin-ranking') }}" class="admin-ranking-button">Admin Ranking</a>
-@endif
-
         </ul>
     </nav>
 </body>

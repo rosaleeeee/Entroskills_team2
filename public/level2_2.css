@@ -62,13 +62,32 @@
     font-size: 20px;
     transition: background-color 0.3s ease;
     position: absolute;
-    bottom: 10px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
     margin-bottom: 5px;
 }
 
 .comment-button:hover {
+    background-color: #218838;
+}
+.comment-button1 {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 5px;
+}
+
+.comment-button1:hover {
     background-color: #218838;
 }
 .co_score {
@@ -88,7 +107,7 @@
 .dia_img {
     width: 30px;
 }
-.comment-button.claim-button {
+.comment-button1.claim-button {
     background-color: #ffc107;
     color: #343a40;
     border: none;
@@ -104,6 +123,6 @@
     transform: translateX(-50%);
 }
 
-.comment-button.claim-button:hover {
+.comment-button1.claim-button:hover {
     background-color: #ffa000;
 }

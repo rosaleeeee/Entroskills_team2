@@ -18,7 +18,7 @@
                     @if(!$winningIdea->user->has_received_idea_points)
                         <form method="post" action="{{ route('claim-idea-points') }}">
                             @csrf
-                            <button type="submit" class="comment-button claim-button">Click Here To Gain 5 Points</button>
+                            <button type="submit" class="comment-button1 claim-button">Click Here To Gain 5 Points</button>
                         </form>
                     @else
                         <p class="already-claimed">You have already claimed your points.</p>
@@ -31,8 +31,11 @@
                 <h3>{{ $winningIdea->title }}</h3>
                 <p>{{ $winningIdea->description }}</p>
                 <p class="submitted-by">Submitted by: {{ $winningIdea->user->name }}</p>
-
+                @if (Auth::user()->id == $winningIdea->user->id)
+                <button class="comment-button1" onclick="window.location.href='business-model/create'">Start making the business model</button>
+                @else
                 <button class="comment-button" onclick="window.location.href='business-model/create'">Start making the business model</button>
+                @endif
             </div>
         </div>
     </div>

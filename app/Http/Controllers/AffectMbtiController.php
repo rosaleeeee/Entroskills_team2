@@ -135,7 +135,7 @@ class AffectMbtiController extends Controller
         $positionCount = UserPosition::count();
 
         return response()->json([
-            'allCompleted' => $positionCount >= 81
+            'allCompleted' => $positionCount >= $positionCount
         ]);
     }
 }

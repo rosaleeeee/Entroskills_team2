@@ -58,7 +58,8 @@
                 </div>
             </div>
             <div class="ccon">
-                <button id="redirectToAffichage" class="btn-affichage">View Finalized Positions</button>
+                <button id="redirectToAffichage" class="btn-affichage1">View Finalized Positions</button>
+                <button class="btn-affichage" onclick="window.location.href='affichage_poste'">View Finalized Positions</button>
             </div>
         </div>
 
@@ -139,7 +140,7 @@
                     if (allAssigned) {
                         redirectToAffichageButton.disabled = false;
                     } else {
-                        redirectToAffichageButton.disabled = true;
+                        redirectToAffichageButton.disabled = false;
                     }
                 }
 
@@ -209,11 +210,8 @@
                         url: '/check-all-users-completed',
                         method: 'GET',
                         success: function(response) {
-                            if (response.allCompleted) {
                                 finalizeJobs();
-                            } else {
-                                alert('Not all users have completed their assignments yet.');
-                            }
+                           
                         },
                         error: function(xhr, status, error) {
                             alert('Error checking completion status.');
@@ -259,7 +257,7 @@
                     });
                 }
 
-                setInterval(checkAllUsersCompleted, 60000); // Check every 60 seconds
+                setInterval(checkAllUsersCompleted, 600000); // Check every 60 seconds
             });
         </script>
     </body>

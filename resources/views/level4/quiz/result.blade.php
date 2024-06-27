@@ -244,7 +244,7 @@
        @elseif ($mbti_type == 'ENFP')
       <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP1.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13); font-weight:bold;"> robert downey jr </h2> </li>  
       <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP2.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13); font-weight:bold;"> will smith </h2> </li>  
-      <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP3.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13)en; font-weight:bold;"> ellen degeneres </h2> </li>  
+      <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP3.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13); font-weight:bold;"> ellen degeneres </h2> </li>  
       <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP4.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13); font-weight:bold;"> quentin tarantino </h2> </li>  
       <li class="card"> <div class="img"><img src="{{ asset('images_mbti/ENFP5.jfif') }}" alt="" draggable="false"> </div> <h2 style="color: rgb(248, 138, 13); font-weight:bold;"> meg ryanx </h2> </li>  
 

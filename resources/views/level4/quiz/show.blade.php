@@ -30,7 +30,7 @@
                 @php
                     $questionKeys = array_keys($questions);
                     $totalQuestions = count($questionKeys);
-                    $questionsPerPage = 15;
+                    $questionsPerPage = 20;
                     $totalPages = ceil($totalQuestions / $questionsPerPage);
                 @endphp
     

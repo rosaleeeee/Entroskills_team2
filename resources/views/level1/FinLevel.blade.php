@@ -38,8 +38,12 @@
             <img class="image_end" src="{{ asset('images/bravo.gif') }}" alt="Business Model Icon">
         </div>
        
-        <button class="start-button" onclick="window.location.href='dashboard'">next</button>
-    </div>
+        <form action="{{ route('dashboard') }}" method="POST">
+            @csrf
+            <!-- Your questions here -->
+        
+            <button class="start-button" type="submit">Next</button>
+        </form>    </div>
 </body>
  
 

@@ -178,3 +178,6 @@ button#showResults:disabled {
 .ccon{
     text-align: center;
 }
+.btn-affichage1{
+    display: none;
+}
