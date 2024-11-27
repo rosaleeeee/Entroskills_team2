@@ -1,23 +1,18 @@
-.container{
-    margin-left: 250px;
-    justify-content: center;
-}
 table {
-    width: 80%;
-    border: 1px solid #ddd;
-    border-radius: 20px;
+    width: 60%;
+    
     border-collapse: collapse;
     margin-top: 20px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
 }
 
 th, td {
     border: 1px solid #ddd;
     padding: 8px;
-    
 }
 
 th {
-    background-color:#6aade8;
+    background-color: #f2f2f2;
     text-align: left;
 }
 
@@ -28,3 +23,12 @@ tr:nth-child(even) {
 tr:hover {
     background-color: #f1f1f1;
 }
+.text-3xl{
+    color: rebeccapurple;
+    margin-left: 400px;
+}
+.container{
+    margin-top: 50px;
+    margin-left: 600px;
+}
+

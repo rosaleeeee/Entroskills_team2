@@ -42,7 +42,7 @@
                     </div>
                 @endforeach
                 <div class="center-buttons">
-                    <button type="submit" class="submit-button1">Done</button>
+                    <button type="submit" class="submit-button1" onclick="window.location.href='/mmm';">Done</button>
                 </div>
             </form>
         </div>

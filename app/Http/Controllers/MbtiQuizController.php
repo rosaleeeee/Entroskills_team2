@@ -315,7 +315,7 @@ class MbtiQuizController extends Controller
         );
 
         // Redirection vers le tableau de bord
-        return redirect()->route('dashboard');
+        return redirect()->route('level1');
     }
 
     public function show()

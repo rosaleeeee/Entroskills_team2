@@ -26,7 +26,7 @@
     </div>
   <script>
       document.getElementById('level1').onclick = function() {
-          window.location.href = '{{ route("level1") }}';
+          window.location.href = '{{ route("newmbti") }}';
       };
   </script>  
   <div id="level2" class="py-6">

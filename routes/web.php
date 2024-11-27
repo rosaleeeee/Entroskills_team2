@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
 Auth::routes([
     'verify' => true
 ]);
+Route::get('/newmbti', [MbtiQuizController::class, 'showStart'])->name('newmbti');
 
 Route::get('/level1', function () {
     return view('level1.level1_obj');
@@ -111,7 +112,7 @@ Route::get('/home_mbti', [MessageController::class, 'index'])->middleware(['auth
 Route::get('/messages', [MessageController::class, 'messages'])->middleware(['auth', 'verified'])->name('messages');
 Route::post('/message', [MessageController::class, 'message'])->middleware(['auth', 'verified'])->name('message');
 
-Route::get('/level1/buss_', function () {
+Route::get('/level1/BUSINESSMODEL', function () {
     return view('level1.BUSINESSMODEL');
 })->name('level1ns');
 
@@ -171,6 +172,37 @@ Route::get('/level1/FinLevel', function () {
     return view('level1.FinLevel');
 })->name('FinLevel');
 
+Route::get('/level1/FinExercice', function () {
+    return view('level1.FinExercice');
+})->name('FinExercice');
+
+Route::get('/level1/StartExercice', function () {
+    return view('level1.StartExercice');
+})->name('StartExercice');
+
+Route::get('/level1/ExerciceBUSINESSMODEL', function () {
+    return view('level1.ExerciceBUSINESSMODEL');
+})->name('ExerciceBUSINESSMODEL');
+
+
+Route::get('/level1/FinLevel', function () {
+    return view('level1.FinLevel');
+})->name('FinLevel');
+
 Route::post('/save-score', [ScoreController::class, 'saveScore'])->name('save.score');
 
+Route::get('/about', function () {
+    return view('about');
+})->middleware(['auth', 'verified'])->name('about');
 
+Route::get('/level3/finlevel', function () {
+    return view('level3.finlevel');
+})->name('finlevel');
+
+Route::get('/business-model/business-model/fin', function () {
+    return view('level1.finlevel');
+})->name('finlevel'); 
+
+Route::get('/fin', function () {
+    return view('level1.finlevel');
+})->name('finlevel');

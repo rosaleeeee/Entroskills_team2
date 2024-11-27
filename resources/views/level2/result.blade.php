@@ -5,7 +5,7 @@
         @php
         $userScore = Auth::user()->score;  
         @endphp
-        <div class="co_score">
+        <div class="co_score"> 
             <img class="dia_img" src="{{ asset('all_mbti/diamond.png') }}" alt="Congratulations">
             <p class="user-score">{{ $userScore }}</p>
         </div>
@@ -69,5 +69,8 @@
                 @endforeach
             </div>
         </div>
+        <div class="btcont" >
+        <button class="start-button" onclick="window.location.href='fin'">Next</button>
     </div>
+</div>
 </x-app-layout>

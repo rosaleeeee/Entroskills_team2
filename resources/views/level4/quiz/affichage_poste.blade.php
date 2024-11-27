@@ -62,7 +62,10 @@
             </section>
             @endforeach
         </section>
-    </main>    
+    </main>   
+    <div class="btcont" >
+        <button class="start-button" onclick="window.location.href='fin'">Next</button>
+    </div> 
    </div>   
     </body>
     </html>

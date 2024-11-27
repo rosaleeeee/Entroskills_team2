@@ -5,15 +5,11 @@
     font-family: "Poppins", sans-serif;
 }
 
-
-
 .image {
-    
     cursor: pointer;
-margin-left: 500px;
+    margin-left: 500px;
+    margin-top: 70px;
 }
-
-
 
 .popup {
     position: fixed;
@@ -29,33 +25,33 @@ margin-left: 500px;
 
 .popup-content {
     background-color: #fff;
-    padding: 40px; /* Augmenter le padding pour augmenter la taille du contenu */
-    width: 80%; /* Ajuster la largeur du contenu du popup */
-    max-width: 600px; /* Limiter la largeur maximale du popup */
+    padding: 90px; /* Augmenter le padding pour augmenter la taille du contenu */
+    width: 1000px; /* Ajuster la largeur du contenu du popup */
+    max-width: 1000px; /* Limiter la largeur maximale du popup */
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
 .popup h2 {
-    margin-bottom: 20px; /* Ajuster la marge inférieure du titre */
+    margin-bottom: 190px; /* Ajuster la marge inférieure du titre */
+    font-size: 20px;
+    
 }
-
 
 .close-btn {
     padding: 10px 20px;
-    background-color: #5398D4;
+    background-color: #ceeb4c;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 90px;
 }
 
 .close-btn:hover {
     background-color: #3a7bbf;
 }
-
-
 
 .bottom-right-button {
     position: absolute;
@@ -76,4 +72,19 @@ margin-left: 500px;
 
 .bottom-right-button:hover {
     background-color: #3a7bbf;
+}
+
+.bottom-right-button:disabled {
+    background-color: #cccccc; /* Couleur grise pour indiquer que le bouton est désactivé */
+    cursor: not-allowed;
+}
+.here{
+    font-size: 25px;
+    margin-left: 200px;
+    margin-top:90px;
+
+    color: #3a7bbf;
+}
+.container{
+    text-align: center;
 }
